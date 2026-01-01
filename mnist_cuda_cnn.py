@@ -4,9 +4,21 @@ from torchvision import datasets, transforms
 
 # --- activate device ---
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("Using PyTorch version ", torch.__version__)
-print("Using CUDA version ", torch.cuda.current_device())
-print("Using device ", device)
+print(f"PyTorch version: {torch.__version__}")
+print(f"CUDA available: {torch.cuda.is_available()}")
+print(f"CUDA runtime version: {torch.version.cuda or 'N/A'}")
+print(f"cuDNN version: {torch.backends.cudnn.version() or 'N/A'}")
+if torch.cuda.is_available():
+    device_index = torch.cuda.current_device()
+    device_name = torch.cuda.get_device_name(device_index)
+    device_capability = ".".join(map(str, torch.cuda.get_device_capability(device_index)))
+    print(f"CUDA device count: {torch.cuda.device_count()}")
+    print(f"CUDA device index: {device_index}")
+    print(f"CUDA device name: {device_name}")
+    print(f"CUDA device capability: {device_capability}")
+else:
+    print("CUDA device: N/A (CPU only)")
+print(f"Selected device: {device}")
 
 # --- Setup Dataset & Dataloaders ---
 transform = transforms.Compose([
